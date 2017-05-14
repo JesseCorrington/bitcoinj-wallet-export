@@ -32,14 +32,14 @@ public class BitcoinManager {
         try {
             this.wallet = loadWalletFromFile(walletFile);
         }
-        catch (UnreadableWalletException e) {
+        catch (Exception e) {
             throw new Exception("Failed to load wallet file: " + walletFile + " -- " + e.getMessage());
         }
 
         wallet.cleanup();
     }
 
-    public Wallet loadWalletFromFile(File f) throws UnreadableWalletException {
+    public Wallet loadWalletFromFile(File f) throws Exception {
         try {
             FileInputStream stream = null;
 
@@ -64,7 +64,7 @@ public class BitcoinManager {
                 }
             }
         } catch (IOException e) {
-            throw new UnreadableWalletException("Could not open file", e);
+            throw new Exception("Could not open file", e);
         }
     }
 
