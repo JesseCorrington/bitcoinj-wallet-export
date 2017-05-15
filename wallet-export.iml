@@ -18,7 +18,7 @@
     <orderEntry type="library" name="Maven: com.squareup.okhttp:okhttp:2.7.2" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.20" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-jdk14:1.6.4" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-nop:1.7.25" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Maven: com.madgag.spongycastle:core:1.56.0.0" level="project" />
   </component>
