@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         BitcoinManager mgr = new BitcoinManager();
@@ -13,11 +15,11 @@ public class Main {
         try {
             mgr.load(filename);
 
-            String pk = mgr.getPubKey();
-            System.out.println("PK: " + pk);
-
-            String sk = mgr.exportPrivateKey(password);
-            System.out.println("SK: " + sk);
+            List<BitcoinManager.KeyPair> keyPairs = mgr.exportPrivateKeys(password);
+            for (int i = 0; i < keyPairs.size(); i++) {
+                BitcoinManager.KeyPair keyPair = keyPairs.get(i);
+                System.out.println(i + ")  " + keyPair);
+            }
         }
         catch (Exception e) {
             System.out.print(e.toString());

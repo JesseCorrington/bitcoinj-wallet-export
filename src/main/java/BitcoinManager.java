@@ -9,20 +9,40 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.TimeZone;
 import java.util.List;
+import java.util.ArrayList;
+
 
 public class BitcoinManager {
     private NetworkParameters networkParams = MainNetParams.get();
     private Wallet wallet = null;
 
-    public String getPubKey() {
+    public class KeyPair {
+        public String address;
+        public String privateKey;
+
+        public String toString() {
+            return "Address: " + address + ", " + "Private Key: " + privateKey;
+        }
+    }
+
+    public List<KeyPair> exportPrivateKeys(String password) throws Exception{
         List<ECKey> keys = wallet.getImportedKeys();
-        ECKey k0 = keys.get(0);
-        return k0.toAddress(networkParams).toString();
+
+        List<KeyPair> keyPairs = new ArrayList<KeyPair>();
+
+        for (int i = 0; i < keys.size(); i++) {
+            ECKey eckey = keys.get(i);
+
+            KeyPair keyPair = new KeyPair();
+            keyPair.address = eckey.toAddress(networkParams).toString();
+            keyPair.privateKey = exportPrivateKey(eckey, password);
+
+            keyPairs.add(keyPair);
+        }
+
+        return keyPairs;
     }
 
     public void load(String filename) throws Exception{
@@ -44,20 +64,14 @@ public class BitcoinManager {
         wallet.cleanup();
     }
 
-    public Wallet loadWalletFromFile(File f) throws UnreadableWalletException {
+
+    private Wallet loadWalletFromFile(File file) throws UnreadableWalletException {
         try {
             FileInputStream stream = null;
 
             try {
-                stream = new FileInputStream(f);
-
-                Wallet wallet = new Wallet(networkParams);
-
-                WalletExtension we = new LastWalletChangeExtension();
-
                 WalletProtobufSerializer reader = new WalletProtobufSerializer();
-
-                wallet = reader.readWallet(stream, we);
+                Wallet wallet = reader.readWallet(new FileInputStream(file));
 
                 if (!wallet.isConsistent()) {
                     System.out.print("Loaded an inconsistent wallet");
@@ -74,33 +88,20 @@ public class BitcoinManager {
         }
     }
 
-    public String exportPrivateKey(String password) throws Exception {
+    private String exportPrivateKey(ECKey ecKey, String password) throws Exception {
         char[] utf16Password = password.toCharArray();
         KeyParameter aesKey = null;
         ECKey decryptedKey = null;
         DumpedPrivateKey dumpedKey = null;
 
         try {
-            ECKey ecKey = wallet.getImportedKeys().get(0);
-
-            Date creationDate = new Date(ecKey.getCreationTimeSeconds() * 1000);
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            format.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String timestamp = format.format(creationDate);
-
             aesKey = aesKeyForPassword(utf16Password);
             decryptedKey = ecKey.decrypt(wallet.getKeyCrypter(), aesKey);
-            return decryptedKey.getPrivateKeyEncoded(networkParams).toString() + "\t" + timestamp;
+            return decryptedKey.getPrivateKeyEncoded(networkParams).toString();
         } catch (KeyCrypterException e) {
             throw new Exception("Wrong Password");
         } finally {
             wipeAesKey(aesKey);
-
-            if (decryptedKey != null) {
-                // TODO:
-                //decryptedKey.clearPrivateKey();
-            }
         }
     }
 
