@@ -2,7 +2,6 @@ import org.bitcoinj.core.*;
 import org.bitcoinj.crypto.KeyCrypter;
 import org.bitcoinj.crypto.KeyCrypterException;
 import org.bitcoinj.params.MainNetParams;
-import org.bitcoinj.wallet.Protos;
 import org.bitcoinj.wallet.*;
 import org.spongycastle.crypto.params.KeyParameter;
 
@@ -14,11 +13,17 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.List;
 
 public class BitcoinManager {
     private NetworkParameters networkParams = MainNetParams.get();
     private Wallet wallet = null;
 
+    public String getPubKey() {
+        List<ECKey> keys = wallet.getImportedKeys();
+        ECKey k0 = keys.get(0);
+        return k0.toAddress(networkParams).toString();
+    }
 
     public void load(String filename) throws Exception{
         // Try to read the wallet from storage, create a new one if not possible.
@@ -76,7 +81,7 @@ public class BitcoinManager {
         DumpedPrivateKey dumpedKey = null;
 
         try {
-            ECKey ecKey = wallet.getIssuedReceiveKeys().get(0);
+            ECKey ecKey = wallet.getImportedKeys().get(0);
 
             Date creationDate = new Date(ecKey.getCreationTimeSeconds() * 1000);
 

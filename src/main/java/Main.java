@@ -16,7 +16,11 @@ public class Main {
 
         try {
             mgr.load(filename);
+
+            String pk = mgr.getPubKey();
             String sk = mgr.exportPrivateKey(password);
+
+            System.out.print("PK: " + pk);
             System.out.print("SK: " + sk);
         }
         catch (Exception e) {
