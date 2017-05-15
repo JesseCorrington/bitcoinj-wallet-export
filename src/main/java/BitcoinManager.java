@@ -47,11 +47,12 @@ public class BitcoinManager {
                 stream = new FileInputStream(f);
 
                 Wallet wallet = new Wallet(networkParams);
-                //wallet.addExtension(new LastWalletChangeExtension());
 
-                Protos.Wallet walletData = WalletProtobufSerializer.parseToProto(stream);
+                WalletExtension we = new LastWalletChangeExtension();
+
                 WalletProtobufSerializer reader = new WalletProtobufSerializer();
-                wallet = reader.readWallet(stream);
+
+                wallet = reader.readWallet(stream, we);
 
                 if (!wallet.isConsistent()) {
                     System.out.print("Loaded an inconsistent wallet");
