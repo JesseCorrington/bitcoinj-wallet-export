@@ -15,3 +15,8 @@ This has only been minimally tested on OS X for my single use case, but there sh
 `./run.sh <wallet path> <decryption password>`
 
 In the case of a backed up Hive wallet, the wallet is named `bitcoinkit.wallet`
+
+
+
+
+If you found this useful, consider donating to `17MESpUf6YvGYBADobD7V1xWAeGMDStCD2`
