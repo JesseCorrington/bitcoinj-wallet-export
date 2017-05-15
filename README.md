@@ -12,9 +12,10 @@ This has only been minimally tested on OS X for my single use case, but there sh
 3) `./build.sh`
 
 ## Usage
-If you're trying to recover keys from a Hive wallet, first search your system for the wallet file `bitcoinkit.wallet`. Then, to print a list of address/private key pairs, do the following.
+1) If you're trying to recover keys from a Hive wallet, first search your system for the wallet file `bitcoinkit.wallet`. 
+2) To print a list of address/private key pairs, do the following.
 `./run.sh <wallet path> <decryption password>`
-
-You can then copy the private keys and import them into the wallet of your choosing. Be sure to close the terminal after use to prevent leaking your private keys.
+3) You can then copy the private keys and import them into the wallet of your choosing.
+4) Be sure to close the terminal after use to prevent leaking your private keys.
 
 If you found this useful, please consider donating to this bitcoin address: `17MESpUf6YvGYBADobD7V1xWAeGMDStCD2`
