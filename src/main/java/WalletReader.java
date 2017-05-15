@@ -4,7 +4,6 @@ import org.bitcoinj.crypto.KeyCrypterException;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.wallet.*;
 import org.spongycastle.crypto.params.KeyParameter;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class BitcoinManager {
+public class WalletReader {
     private NetworkParameters networkParams = MainNetParams.get();
     private Wallet wallet = null;
 
@@ -45,12 +44,9 @@ public class BitcoinManager {
         return keyPairs;
     }
 
-    public void load(String filename) throws Exception{
-        // Try to read the wallet from storage, create a new one if not possible.
+    public void load(String filename) throws Exception {
         File walletFile = new File(filename);
-
         if (!walletFile.exists()) {
-            // Stop here, because the caller might want to create an encrypted wallet and needs to supply a password.
             throw new Exception("No wallet file found at: " + walletFile);
         }
 
@@ -89,14 +85,11 @@ public class BitcoinManager {
     }
 
     private String exportPrivateKey(ECKey ecKey, String password) throws Exception {
-        char[] utf16Password = password.toCharArray();
         KeyParameter aesKey = null;
-        ECKey decryptedKey = null;
-        DumpedPrivateKey dumpedKey = null;
 
         try {
-            aesKey = aesKeyForPassword(utf16Password);
-            decryptedKey = ecKey.decrypt(wallet.getKeyCrypter(), aesKey);
+            aesKey = passwordToAESKey(password.toCharArray());
+            ECKey decryptedKey = ecKey.decrypt(wallet.getKeyCrypter(), aesKey);
             return decryptedKey.getPrivateKeyEncoded(networkParams).toString();
         } catch (KeyCrypterException e) {
             throw new Exception("Wrong Password");
@@ -105,9 +98,7 @@ public class BitcoinManager {
         }
     }
 
-    /* --- Encryption/decryption --- */
-
-    private KeyParameter aesKeyForPassword(char[] utf16Password) throws Exception {
+    private KeyParameter passwordToAESKey(char[] utf16Password) throws Exception {
         KeyCrypter keyCrypter = wallet.getKeyCrypter();
 
         if (keyCrypter == null) {
