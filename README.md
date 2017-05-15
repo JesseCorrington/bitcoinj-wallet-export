@@ -17,6 +17,4 @@ This has only been minimally tested on OS X for my single use case, but there sh
 In the case of a backed up Hive wallet, the wallet is named `bitcoinkit.wallet`
 
 
-
-
-If you found this useful, consider donating to `17MESpUf6YvGYBADobD7V1xWAeGMDStCD2`
+If you found this useful, please consider donating to this bitcoin address: `17MESpUf6YvGYBADobD7V1xWAeGMDStCD2`
