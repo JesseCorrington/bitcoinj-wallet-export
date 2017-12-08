@@ -18,4 +18,4 @@ This has only been minimally tested on OS X for my single use case, but there sh
 3) You can then copy the private keys and import them into the wallet of your choosing.
 4) Be sure to close the terminal after use to prevent leaking your private keys.
 
-If you found this useful, please consider donating to this bitcoin address: `17MESpUf6YvGYBADobD7V1xWAeGMDStCD2`
+If you found this useful, please consider donating to this bitcoin address: `3DN4DzVw5VooRpdkknFiN9MYw4Edr1XdsL`
